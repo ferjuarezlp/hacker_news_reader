@@ -1,8 +1,9 @@
 package com.ferjuarez.readerhackernews.di
 
 import android.content.Context
-import com.ferjuarez.hackernews.networking.ArticlesApiDataSource
+import com.ferjuarez.readerhackernews.BuildConfig
 import com.ferjuarez.readerhackernews.networking.ArticleService
+import com.ferjuarez.readerhackernews.networking.ArticlesApiDataSource
 import com.ferjuarez.readerhackernews.persistance.AppDatabase
 import com.ferjuarez.readerhackernews.persistance.ArticleDao
 import com.ferjuarez.readerhackernews.repository.ArticlesRepository
@@ -13,6 +14,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -23,10 +26,30 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideRetrofit() : Retrofit {
+        val httpClient = OkHttpClient.Builder()
+        if (BuildConfig.DEBUG) {
+            val loggingInterceptor = HttpLoggingInterceptor()
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            httpClient.addInterceptor(loggingInterceptor)
+        }
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
+
+        return Retrofit.Builder()
+            .baseUrl("https://hn.algolia.com/api/")
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(httpClient.build())
+            .build();
+    }
+
+    /*@Singleton
+    @Provides
     fun provideRetrofit(gson: Gson) : Retrofit = Retrofit.Builder()
         .baseUrl("https://hn.algolia.com/api/")
         .addConverterFactory(GsonConverterFactory.create(gson))
-        .build()
+        .build()*/
 
     @Provides
     fun provideGson(): Gson = GsonBuilder().create()

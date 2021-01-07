@@ -1,7 +1,7 @@
 package com.ferjuarez.readerhackernews.repository
 
-import com.ferjuarez.hackernews.networking.ArticlesApiDataSource
 import com.ferjuarez.readerhackernews.data.get
+import com.ferjuarez.readerhackernews.networking.ArticlesApiDataSource
 import com.ferjuarez.readerhackernews.persistance.ArticleDao
 import javax.inject.Inject
 
