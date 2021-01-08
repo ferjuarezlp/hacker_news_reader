@@ -16,8 +16,17 @@ class ArticleAdapter(private val listener: ArticleItemListener) : RecyclerView.A
 
     fun setItems(items: ArrayList<Article>) {
         this.items.clear()
-        this.items.addAll(items)
+        this.items.addAll(items.filter { !it.deleted })
         notifyDataSetChanged()
+    }
+
+    fun removeAt(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun getItem(position: Int): Article{
+        return items[position]
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {

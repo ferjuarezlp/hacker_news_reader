@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import com.ferjuarez.readerhackernews.databinding.FragmentArticleBinding
 import com.ferjuarez.readerhackernews.utils.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_article.*
 
 @AndroidEntryPoint
 class ArticleFragment : Fragment() {
@@ -30,13 +29,14 @@ class ArticleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.getString("url")?.let {
-            webView.webChromeClient = object : WebChromeClient() {
+            binding.webView.webChromeClient = object : WebChromeClient() {
                 override fun onProgressChanged(view: WebView, progress: Int) {
-                    if (progress == 100) webViewProgressBar.visibility = View.INVISIBLE
+                    if (isAdded){
+                        if (progress == 100) binding.webViewProgressBar.visibility = View.INVISIBLE
+                    }
                 }
             }
-            webView.loadUrl(it)
+            binding.webView.loadUrl(it)
         }
     }
-
 }

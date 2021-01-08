@@ -44,13 +44,6 @@ object AppModule {
             .build();
     }
 
-    /*@Singleton
-    @Provides
-    fun provideRetrofit(gson: Gson) : Retrofit = Retrofit.Builder()
-        .baseUrl("https://hn.algolia.com/api/")
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .build()*/
-
     @Provides
     fun provideGson(): Gson = GsonBuilder().create()
 
